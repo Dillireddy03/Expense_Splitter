@@ -1,10 +1,13 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { AppContext } from "../context/AppContext";
 
 export default function Friends() {
   const { state, dispatch } = useContext(AppContext);
+
   const nameRef = useRef();
   const upiRef = useRef();
+
+  const [editId, setEditId] = useState(null);
 
   const addFriend = () => {
     if (!nameRef.current.value || !upiRef.current.value) return;
@@ -22,17 +25,51 @@ export default function Friends() {
     upiRef.current.value = "";
   };
 
+  const updateFriend = () => {
+    dispatch({
+      type: "UPDATE_FRIEND",
+      payload: {
+        id: editId,
+        name: nameRef.current.value,
+        upiId: upiRef.current.value,
+      },
+    });
+
+    setEditId(null);
+    nameRef.current.value = "";
+    upiRef.current.value = "";
+  };
+
+  const deleteFriend = (id) => {
+    dispatch({
+      type: "DELETE_FRIEND",
+      payload: id,
+    });
+  };
+
+  const editFriend = (friend) => {
+    setEditId(friend.id);
+    nameRef.current.value = friend.name;
+    upiRef.current.value = friend.upiId;
+  };
+
   return (
     <div className="container">
       <div className="card">
-        <h3>Add Friend</h3>
+        <h3>{editId ? "Edit Friend" : "Add Friend"}</h3>
 
         <input ref={nameRef} placeholder="Friend Name" />
         <input ref={upiRef} placeholder="Friend UPI ID" />
 
-        <button className="primary" onClick={addFriend}>
-          Add Friend
-        </button>
+        {editId ? (
+          <button className="primary" onClick={updateFriend}>
+            Update Friend
+          </button>
+        ) : (
+          <button className="primary" onClick={addFriend}>
+            Add Friend
+          </button>
+        )}
       </div>
 
       {state.friends.length === 0 ? (
@@ -45,6 +82,7 @@ export default function Friends() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
                 marginBottom: "12px",
               }}
             >
@@ -53,6 +91,23 @@ export default function Friends() {
                 <p style={{ fontSize: "12px", color: "#64748b" }}>
                   UPI: {f.upiId}
                 </p>
+              </div>
+
+              {/* ✅ Edit + Delete Buttons */}
+              <div>
+                <button
+                  style={{ marginRight: "8px" }}
+                  onClick={() => editFriend(f)}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="danger"
+                  onClick={() => deleteFriend(f.id)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}

@@ -25,26 +25,17 @@ export default function Dashboard() {
     <div className="container">
       <h2 className="dashboard-title">Dashboard Overview</h2>
 
-      {/* Summary Section */}
       <SummaryCards
         expenses={expenses}
         thisMonthTotal={thisMonthTotal}
         friendCount={state.friends.length}
       />
 
-      {/* Add Expense */}
-      <ExpenseForm
-        friends={state.friends}
-        onAdd={addExpense}
-      />
+      <ExpenseForm friends={state.friends} onAdd={addExpense} />
 
-      {/* Expense List */}
-      <ExpenseList
-        expenses={expenses}
-        onDelete={deleteExpense}
-      />
+      <ExpenseList expenses={expenses} onDelete={deleteExpense} />
 
-      {/* Settlement Section */}
+      {/* 🔥 Updated Settlement Section */}
       <div className="card">
         <h3>Settlement Summary</h3>
 
@@ -57,22 +48,26 @@ export default function Dashboard() {
             );
 
             return (
-              <div
-                key={name}
-                className="settlement-row"
-              >
+              <div key={name} className="settlement-row">
                 <div>
                   <strong>{name}</strong>
                   <p className="settlement-amount">
                     ₹{balance.toFixed(2)}
                   </p>
+
+                  {/* ✅ Show UPI always */}
+                  {friend?.upiId && (
+                    <p style={{ fontSize: "12px", color: "#64748b" }}>
+                      UPI: {friend.upiId}
+                    </p>
+                  )}
                 </div>
 
                 {balance < 0 && friend?.upiId && (
                   <div className="upi-box">
                     Pay via UPI:
                     <br />
-                    <span>{friend.upiId}</span>
+                    <strong>{friend.upiId}</strong>
                   </div>
                 )}
 
