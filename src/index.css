@@ -371,3 +371,20 @@ button.secondary:hover {
   border-radius: 8px;
   border: 1px solid #cbd5e1;
 }
+.friend-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+.friend-actions button {
+  margin-left: 8px;
+}
+.upi-id {
+  font-size: 13px;
+  color: #64748b;
+}
+.settlement-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
